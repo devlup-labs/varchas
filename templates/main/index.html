@@ -86,16 +86,16 @@
             <div class="button cta_button" style="margin:10px"><a href="{% url 'accounts:profile' %}">View Profile</a>
             </div>
             {% else %}
-            <div class="button cta_button" style="margin:10px"><a href="#" onclick="alert('varchas is postponed new dates will be anounced soon.')">Join Team</a>
+            <div class="button cta_button" style="margin:10px"><a href="{% url 'accounts:joinTeam' %}">Join Team</a>
+
             </div>
-            <div class="button cta_button" style="margin:10px"><a href="#" onclick="alert('varchas is postponed new dates will be anounced soon.')">Create Team</a>
+            <div class="button cta_button" style="margin:10px"><a href="{% url 'registration:team' %}">Create Team</a>
             </div>
             {% endif %}
             {% else %}
-            <div class="button cta_button" style="margin:10px"><a href="#" onclick="alert('varchas is postponed new dates will be anounced soon.')">Register as
-                Player</a>
+            <div class="button cta_button" style="margin:10px"><a href="{% url 'accounts:register' %}">Register as Player</a>
             </div>
-            <div class="button cta_button" style="margin:10px"><a href="#" onclick="alert('varchas is postponed new dates will be anounced soon.')">Register as CA</a>
+            <div class="button cta_button" style="margin:10px"><a href="{% url 'registration:ca' %}">Register as CA</a>
             </div>
             {% endif %}
             <div class="button cta_button" style="margin:10px"><a   >Instructions</a></div>
