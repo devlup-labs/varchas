@@ -11,14 +11,14 @@ from django.contrib.auth.models import User
 
 
 class CampusAmbassadorRegisterView(CreateView):
-    template_name = 'registration/ca_reg.html'
+    template_name = 'teams/ca_reg.html'
     success_url = '/'
     form_class = CampusAmbassadorForm
 
 
 class TeamFormationView(CreateView):
     form_class = TeamRegistrationForm
-    template_name = 'registration/team.html'
+    template_name = 'teams/team.html'
     success_url = '/account/myTeam'
 
     def form_valid(self, form):
@@ -52,7 +52,7 @@ class TeamFormationView(CreateView):
 # @login_required(login_url="login")
 class removePlayerView(FormView):
     form_class = RemovePlayerForm
-    template_name = 'registration/remove_player.html'
+    template_name = 'teams/remove_player.html'
     success_url = '/account/myTeam'
 
     def form_valid(self, form):

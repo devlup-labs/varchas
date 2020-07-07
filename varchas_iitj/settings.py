@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'adminportal.apps.AdminportalConfig',
     'events.apps.EventsConfig',
     'main.apps.MainConfig',
-    'registration.apps.RegistrationConfig',
+    'teams.apps.TeamsConfig',
     'sponsors.apps.SponsorsConfig',
     'ckeditor',
     'ckeditor_uploader',

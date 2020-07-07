@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .forms import EmailForm
-from registration.models import Team
+from teams.models import Team
 from accounts.models import CampusAmbassador
 import xlwt
 from django.http import HttpResponse

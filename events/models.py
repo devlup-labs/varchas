@@ -3,7 +3,7 @@ from django.db import models
 from adminportal.models import AdminProfile
 # from .utils import unique_slug_generator
 # from versatileimagefield.fields import VersatileImageField
-from registration.models import Team
+from teams.models import Team
 from ckeditor_uploader.fields import RichTextUploadingField
 
 

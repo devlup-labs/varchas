@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
-from registration.models import Team
+from teams.models import Team
 from django.http import HttpResponse
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets

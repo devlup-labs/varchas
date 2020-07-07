@@ -31,7 +31,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('account/', include('accounts.urls')),
-    path('registration/', include('registration.urls')),
+    path('teams/', include('teams.urls')),
     path('events/', include('events.urls')),
     path('sponsors/', include('sponsors.urls')),
     url('^', include('django.contrib.auth.urls')),

@@ -69,14 +69,14 @@
             {% else %}
             <div class="button cta_button" style="margin:10px"><a href="{% url 'accounts:joinTeam' %}" >Join Team</a>
             </div>
-            <div class="button cta_button" style="margin:10px"><a href="{% url 'registration:team' %}" >Create Team</a>
+            <div class="button cta_button" style="margin:10px"><a href="{% url 'teams:team' %}" >Create Team</a>
             </div>
             {% endif %}
             {% else %}
             <div class="button cta_button" style="margin:10px"><a href="{% url 'accounts:register' %}" >Register as
                 Player</a>
             </div>
-            <div class="button cta_button" style="margin:10px"><a href="{% url 'registration:ca' %}" >Register as CA</a>
+            <div class="button cta_button" style="margin:10px"><a href="{% url 'teams:ca' %}" >Register as CA</a>
             </div>
             {% endif %}
             <div class="button cta_button" style="margin:10px"><a   >Instructions</a></div>
