@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
-from registration.models import TeamRegistration
+from registration.models import Team
 from django.http import HttpResponse
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -63,7 +63,7 @@ def DisplayProfile(request):
 def DisplayTeam(request):
     user = get_object_or_404(UserProfile, user=request.user)
     teamId = user.teamId
-    team = get_object_or_404(TeamRegistration, teamId=teamId)
+    team = get_object_or_404(Team, teamId=teamId)
     return render(request, 'accounts/myTeam.html', {'profile_team': team, 'profile_user': user, 'page': "team"})
 
 
@@ -73,7 +73,7 @@ def leaveTeam(request):
     teamId = user.teamId
     user.teamId = "NULL"
     user.save()
-    team = get_object_or_404(TeamRegistration, teamId=teamId)
+    team = get_object_or_404(Team, teamId=teamId)
     team.members.remove(user)
     return redirect('main:home')
 
@@ -89,7 +89,7 @@ def joinTeam(request):
                 message = "You are already in team {}".format(user.teamId)
                 message += "\nYou have to register again to join another team. \nContact Varchas administrators."
                 return HttpResponse(message, content_type="text/plain")
-            team = get_object_or_404(TeamRegistration, teamId=teamId)
+            team = get_object_or_404(Team, teamId=teamId)
             user.teamId = teamId
             user.save()
             team.members.add(user)

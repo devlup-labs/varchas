@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .forms import EmailForm
-from registration.models import TeamRegistration, CampusAmbassador
+from registration.models import Team, CampusAmbassador
 import xlwt
 from django.http import HttpResponse
 from django.core.mail import send_mail
@@ -13,7 +13,7 @@ from django.views.generic import CreateView
 def dashboard(request):
     if not request.user.is_superuser:
         return render(request, "404")
-    teams = TeamRegistration.objects.all()
+    teams = Team.objects.all()
     nteams = teams.count()
     users = UserProfile.objects.all()
     nusers = users.count()
@@ -25,7 +25,7 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def dashboardTeams(request):
-    teams = TeamRegistration.objects.all().order_by('-captian__user__date_joined')
+    teams = Team.objects.all().order_by('-captian__user__date_joined')
     return render(request, 'adminportal/dashboardTeams.html', {'teams': teams})
 
 
@@ -55,7 +55,7 @@ def downloadExcel(request):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     font_style = xlwt.XFStyle()
-    teams = TeamRegistration.objects.all().order_by('-captian__user__date_joined')
+    teams = Team.objects.all().order_by('-captian__user__date_joined')
     for team in teams:
         members = []
         for member in team.members.all():
@@ -117,7 +117,7 @@ class sendMail(CreateView):
         data = self.request.POST.copy()
         recipient = []
         if int(data['recipient']) < 10:
-            teams = TeamRegistration.objects.all()
+            teams = Team.objects.all()
             for team in teams:
                 if int(team.sport) == int(data['recipient']):
                     recipient.append(team.captian.user.email)
@@ -130,7 +130,7 @@ class sendMail(CreateView):
                           [ca.email], fail_silently=False, html_message=message)
             return super(sendMail, self).form_valid(form)
         elif int(data['recipient']) == 11:
-            teams = TeamRegistration.objects.all()
+            teams = Team.objects.all()
             for team in teams:
                 if team.captian:
                     message = '''<!DOCTYPE html> <html><body><p>{}</p>

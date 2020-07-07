@@ -1,5 +1,5 @@
 from django import forms
-from .models import CampusAmbassador, TeamRegistration
+from .models import CampusAmbassador, Team
 
 
 class CampusAmbassadorForm(forms.ModelForm):
@@ -36,14 +36,14 @@ class CampusAmbassadorForm(forms.ModelForm):
 
 class TeamRegistrationForm(forms.ModelForm):
     class Meta:
-        model = TeamRegistration
+        model = Team
         fields = ['sport', 'college']
 
 
 class TeamRegistrationForm1(forms.ModelForm):
 
     class Meta:
-        model = TeamRegistration
+        model = Team
         fields = ['sport', 'teamId', 'college']
 
     def __init__(self, *args, **kwargs):

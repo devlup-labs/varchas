@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CampusAmbassador, TeamRegistration
+from .models import CampusAmbassador, Team
 
 
 class CampusAmbassadorAdmin(admin.ModelAdmin):
@@ -12,7 +12,7 @@ admin.site.register(CampusAmbassador, CampusAmbassadorAdmin)
 
 class TeamAdmin(admin.ModelAdmin):
     class Meta:
-        model = TeamRegistration
+        model = Team
 
 
-admin.site.register(TeamRegistration, TeamAdmin)
+admin.site.register(Team, TeamAdmin)

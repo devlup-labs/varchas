@@ -3,7 +3,7 @@ from django.db import models
 from adminportal.models import AdminProfile
 # from .utils import unique_slug_generator
 # from versatileimagefield.fields import VersatileImageField
-from registration.models import TeamRegistration
+from registration.models import Team
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
@@ -43,8 +43,10 @@ class Event(models.Model):
 
 
 class Match(Event):
-    team1 = models.ForeignKey(TeamRegistration, on_delete=models.CASCADE, related_name="team1")
-    team2 = models.ForeignKey(TeamRegistration, on_delete=models.CASCADE, related_name="team2")
+    team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team1")
+    # team1 = models.IntegerField()
+    team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team2")
+    # team2 = models.IntegerField()
     STATUS_CHOICES = (
         ('1', 'Live'),
         ('2', 'Not Started'),
@@ -59,7 +61,8 @@ class Match(Event):
     match_type = models.CharField(max_length=2, choices=MATCH_CHOICES)
     play_status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='2')
     end_comment = models.TextField(blank=True, null=True)
-    winner = models.ForeignKey(TeamRegistration, on_delete=models.CASCADE, related_name="winner", blank=True, null=True)
+    winner = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="winner", blank=True, null=True)
+    # winner = models.IntegerField()
     final_score = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):

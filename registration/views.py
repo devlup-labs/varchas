@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from accounts.models import UserProfile
 from django.http import HttpResponse
 from random import random
-from .models import TeamRegistration
+from .models import Team
 from django.core.mail import send_mail
 from django.views.generic import FormView
 from django.contrib.auth.models import User
@@ -25,7 +25,7 @@ class TeamFormationView(CreateView):
         user = self.request.user
         if user is not None:
             data = self.request.POST.copy()
-            spor = TeamRegistration.SPORT_CHOICES[int(data['sport'])-1][1][:3]
+            spor = Team.SPORT_CHOICES[int(data['sport'])-1][1][:3]
             data['teamId'] = "VA-" + spor[:3].upper() + '-' + user.username[:3].upper() + "{}".format(int(random()*100))
             form = TeamRegistrationForm1(data)
             user = get_object_or_404(UserProfile, user=user)
@@ -59,7 +59,7 @@ class removePlayerView(FormView):
         user = get_object_or_404(UserProfile, user=self.request.user)
         if user.teamId == "NULL":
             return HttpResponse("You must registered in a team to complete this operation.")
-        team = get_object_or_404(TeamRegistration, captian=user)
+        team = get_object_or_404(Team, captian=user)
         user = get_object_or_404(User, email=form['player'].value())
         user = get_object_or_404(UserProfile, user=user)
         user.teamId = "NULL"

@@ -34,7 +34,7 @@ def pre_save_campus_ambassador(sender, instance, **kwargs):
 pre_save.connect(pre_save_campus_ambassador, sender=CampusAmbassador)
 
 
-class TeamRegistration(models.Model):
+class Team(models.Model):
     SPORT_CHOICES = (
         ('1', 'Athletics'),
         ('2', 'Badminton'),
