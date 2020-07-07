@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import IndexView, NavBarSubOptionsPageView, OurTeamView, comingSoon, OurTeamViewSet
+from .views import IndexView, NavBarSubOptionsPageView, comingSoon, OurTeamView, OurTeamViewSet
 from django.conf.urls import url, include
 from rest_framework import routers
 

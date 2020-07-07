@@ -1,9 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
-from .models import UserProfile
-from registration.models import CampusAmbassador
-
+from .models import UserProfile, CampusAmbassador
 
 class RegisterForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(

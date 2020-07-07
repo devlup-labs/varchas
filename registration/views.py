@@ -70,6 +70,6 @@ class removePlayerView(FormView):
     def get_context_data(self, **kwargs):
         context = super(removePlayerView, self).get_context_data(**kwargs)
         user = get_object_or_404(UserProfile, user=self.request.user)
-        team = get_object_or_404(TeamRegistration, captian=user)
+        team = get_object_or_404(Team, captian=user)
         context['players'] = team.members.all()
         return context

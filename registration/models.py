@@ -1,8 +1,5 @@
-from django.db.models.signals import pre_save
 from django.db import models
-from .utils import unique_ca_referral_code
 from accounts.models import UserProfile
-from django.core.mail import send_mail
 
 
 class CampusAmbassador(models.Model):

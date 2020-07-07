@@ -8,7 +8,6 @@ from django.core.mail import send_mail
 from accounts.models import UserProfile
 from django.views.generic import CreateView
 
-
 @login_required(login_url='login')
 def dashboard(request):
     if not request.user.is_superuser:

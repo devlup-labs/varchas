@@ -1,13 +1,31 @@
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 # from .utils import SiteAccessMixin
-from .models import HomeImageCarousel, NavBarSubOptions, HomeEventCard, HomeBriefCard, OurTeam
+from .models import HomeImageCarousel, NavBarSubOptions, HomeEventCard, HomeBriefCard
 from django.shortcuts import get_object_or_404, render
 from accounts.models import UserProfile
 from rest_framework import viewsets
+from adminportal.models import OurTeam
 from .serializers import OurTeamSerializer
 from rest_framework import permissions
 
+class OurTeamView(TemplateView):
+    template_name = 'main/our_team.html'
+    model = OurTeam
+
+    def get_context_data(self, **kwargs):
+        context = super(OurTeamView, self).get_context_data(**kwargs)
+        context["our_team"] = OurTeam.objects.all
+        context['page'] = "ourTeam"
+        return context
+
+class OurTeamViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = OurTeam.objects.all()
+    serializer_class = OurTeamSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 class IndexView(TemplateView):
     template_name = 'main/index.html'
@@ -44,18 +62,6 @@ class NavBarSubOptionsPageView(DetailView):
             self.template_name = 'main/navbarsuboptionpage.html'
         return self.render_to_response(context)
 
-
-class OurTeamView(TemplateView):
-    template_name = 'main/our_team.html'
-    model = OurTeam
-
-    def get_context_data(self, **kwargs):
-        context = super(OurTeamView, self).get_context_data(**kwargs)
-        context["our_team"] = OurTeam.objects.all
-        context['page'] = "ourTeam"
-        return context
-
-
 def comingSoon(request):
     return render(request, 'main/comingSoon.html')
 
@@ -66,12 +72,4 @@ def error_404(request, exception):
 
 def error_500(request):
     return render(request, 'main/error_500.html', status=500)
-
-
-class OurTeamViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = OurTeam.objects.all()
-    serializer_class = OurTeamSerializer
-    permission_classes = [permissions.IsAdminUser]
+    

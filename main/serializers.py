@@ -1,4 +1,4 @@
-from .models import OurTeam
+from adminportal.models import OurTeam
 from rest_framework import serializers
 
 
