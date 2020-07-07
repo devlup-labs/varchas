@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .utils import unique_ca_referral_code
 from django.core.mail import send_mail
 
+
 class CampusAmbassador(models.Model):
     name = models.CharField(max_length=32)
     email = models.EmailField()
@@ -31,6 +32,7 @@ def pre_save_campus_ambassador(sender, instance, **kwargs):
 
 
 pre_save.connect(pre_save_campus_ambassador, sender=CampusAmbassador)
+
 
 class UserProfile(models.Model):
     ACCOMMODATION_CHOICES = (

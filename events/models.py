@@ -44,9 +44,7 @@ class Event(models.Model):
 
 class Match(Event):
     team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team1")
-    # team1 = models.IntegerField()
     team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team2")
-    # team2 = models.IntegerField()
     STATUS_CHOICES = (
         ('1', 'Live'),
         ('2', 'Not Started'),
@@ -62,7 +60,6 @@ class Match(Event):
     play_status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='2')
     end_comment = models.TextField(blank=True, null=True)
     winner = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="winner", blank=True, null=True)
-    # winner = models.IntegerField()
     final_score = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):

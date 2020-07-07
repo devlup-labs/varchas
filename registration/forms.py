@@ -1,6 +1,6 @@
 from django import forms
-from .models import CampusAmbassador, Team
-
+from .models import Team
+from accounts.models import CampusAmbassador
 
 class CampusAmbassadorForm(forms.ModelForm):
     class Meta:
