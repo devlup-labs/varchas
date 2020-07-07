@@ -1,14 +1,5 @@
 from django.contrib import admin
-from .models import HomeImageCarousel, NavBarOptions, NavBarSubOptions, HomeEventCard, HomeBriefCard
-
-
-class HomeImageCarouselAdmin(admin.ModelAdmin):
-    class Meta:
-        model = HomeImageCarousel
-
-
-admin.site.register(HomeImageCarousel, HomeImageCarouselAdmin)
-
+from .models import NavBarOptions, NavBarSubOptions, HomeEventCard, HomeBriefCard
 
 @admin.register(NavBarOptions)
 class NavBarOptionsAdmin(admin.ModelAdmin):
