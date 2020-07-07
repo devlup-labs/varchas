@@ -1,8 +1,5 @@
 from django.db import models
-# from django.shortcuts import reverse
 from adminportal.models import AdminProfile
-# from .utils import unique_slug_generator
-# from versatileimagefield.fields import VersatileImageField
 from teams.models import Team
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -10,24 +7,24 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class Event(models.Model):
 
     VENUE_CHOICES = (
-    ('1', 'Football Ground'),
-    ('2', 'Volleyball Ground'),
-    ('3', 'Tennis Ground'),
-    ('4', 'Badminton Ground'),
-    ('5', 'Lecture Hall Complex'),
+        ('1', 'Football Ground'),
+        ('2', 'Volleyball Ground'),
+        ('3', 'Tennis Ground'),
+        ('4', 'Badminton Ground'),
+        ('5', 'Lecture Hall Complex'),
     )
     EVENT_CHOICES = (
-    ('1', 'Athletics'),
-    ('2', 'Badminton'),
-    ('3', 'Basketball'),
-    ('4', 'Chess'),
-    ('5', 'Cricket'),
-    ('6', 'Football'),
-    ('7', 'Table Tenis'),
-    ('8', 'Tenis'),
-    ('9', 'Volleyball'),
-    ('10', 'Marathon'),
-    ('11', 'SOCH'),
+        ('1', 'Athletics'),
+        ('2', 'Badminton'),
+        ('3', 'Basketball'),
+        ('4', 'Chess'),
+        ('5', 'Cricket'),
+        ('6', 'Football'),
+        ('7', 'Table Tenis'),
+        ('8', 'Tenis'),
+        ('9', 'Volleyball'),
+        ('10', 'Marathon'),
+        ('11', 'SOCH'),
     )
     event = models.CharField(max_length=2, choices=EVENT_CHOICES, default=1)
     venue = models.CharField(max_length=3, choices=VENUE_CHOICES)
@@ -51,10 +48,10 @@ class Match(Event):
         ('3', 'Ended'),
     )
     MATCH_CHOICES = (
-       ('1', 'POOL MATCH'),
-       ('2', 'QUATER FINAL'),
-       ('3', 'SEMI FINAL'),
-       ('4', 'FINAL'),
+        ('1', 'POOL MATCH'),
+        ('2', 'QUATER FINAL'),
+        ('3', 'SEMI FINAL'),
+        ('4', 'FINAL'),
     )
     match_type = models.CharField(max_length=2, choices=MATCH_CHOICES)
     play_status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='2')

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from .models import UserProfile, CampusAmbassador
 
+
 class RegisterForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(
         attrs={'type': 'text', 'placeholder': ' ', 'icon': 'a'}), required=False)

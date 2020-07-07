@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ValidationError
 
+
 class HomeImageCarousel(models.Model):
     ordering = models.PositiveIntegerField(default=64)
     title = models.CharField(max_length=64)

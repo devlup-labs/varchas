@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import UserProfile
 
+
 class Team(models.Model):
     SPORT_CHOICES = (
         ('1', 'Athletics'),

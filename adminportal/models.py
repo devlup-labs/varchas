@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
+
 class OurTeam(models.Model):
     POSITION_CHOICES = (
         (1, 'Festival Chief'),
@@ -36,6 +37,7 @@ class OurTeam(models.Model):
 
     class Meta:
         ordering = ['position']
+
 
 class AdminProfile(models.Model):
     DEPARTMENT_CHOICES = (

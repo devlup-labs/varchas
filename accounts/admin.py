@@ -9,6 +9,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile, UserProfileAdmin)
 
+
 class CampusAmbassadorAdmin(admin.ModelAdmin):
     class Meta:
         model = CampusAmbassador

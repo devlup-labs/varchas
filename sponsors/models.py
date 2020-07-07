@@ -1,5 +1,4 @@
 from django.db import models
-# from versatileimagefield.fields import VersatileImageField
 
 
 class SponsorType(models.Model):
@@ -15,7 +14,6 @@ class SponsorType(models.Model):
 
 class Sponsor(models.Model):
     name = models.CharField(max_length=128)
-    # logo = VersatileImageField(upload_to='sponsor')
     logo = models.ImageField(upload_to='sponsor')
     sponsor_type = models.ForeignKey(SponsorType, on_delete=models.CASCADE)
     link = models.URLField(help_text="Sponsor's website url", null=True, blank=True, default=None)

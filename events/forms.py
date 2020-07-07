@@ -2,7 +2,6 @@ from django import forms
 from .models import Match
 
 
-# forms.TimeField.input_formats = ['%I:%M %p%z'] #['%Y-%m-%dT%H:%M']
 class DateInput(forms.DateInput):
     input_type = 'date'
 
