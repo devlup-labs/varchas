@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
-from .models import HomeImageCarousel, NavBarSubOptions, HomeEventCard, HomeBriefCard
+from .models import HomeImageCarousel, NavBarSubOptions
 from django.shortcuts import get_object_or_404, render
 from accounts.models import UserProfile
 from rest_framework import viewsets

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NavBarOptions, NavBarSubOptions, HomeEventCard, HomeBriefCard
+from .models import NavBarOptions, NavBarSubOptions, HomeEventCard
 
 @admin.register(NavBarOptions)
 class NavBarOptionsAdmin(admin.ModelAdmin):
@@ -23,5 +23,3 @@ class NavBarSubOptionsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(HomeEventCard)
-
-admin.site.register(HomeBriefCard)
