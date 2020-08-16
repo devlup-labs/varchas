@@ -69,7 +69,6 @@ class UserProfile(models.Model):
     referral = models.CharField(max_length=7, blank=True, null=True)
     id_issued = models.BooleanField(default=False)
     qr_code = models.ImageField(upload_to='qr_code', blank=True, null=True)
-    # teamId = models.CharField(max_length=15, default="NULL")
     teamId = models.ForeignKey("registration.TeamRegistration", on_delete=models.CASCADE, null=True, related_name="member")
 
     def __str__(self):

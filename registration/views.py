@@ -36,10 +36,8 @@ class TeamFormationView(CreateView):
             team = form.save()
             team.captian = user
             team.save()
-            # user.teamId = team.teamId
             user.teamId = team
             user.save()
-            # team.members.add(user)
 
             message = '''<!DOCTYPE html> <html><body>Hi {}!<br>You have successfully registered for Varchas2020.<br>Your teamId is: <b>{}</b><br>
                           Check your team details here: <a href="http://varchas2020.org/account/myTeam">varchas2020.org/accou
@@ -65,15 +63,12 @@ class removePlayerView(FormView):
         team = get_object_or_404(TeamRegistration, teamId=teamId)
         if user != team.captian:
             return HttpResponse("Only captain can remove a player in a team")
-        # team = get_object_or_404(TeamRegistration, captian=user)
         user = get_object_or_404(User, email=form['player'].value())
         user = get_object_or_404(UserProfile, user=user)
         if user.teamId != teamId:
             return HttpResponse("Sorry this player is not in the team")
-        # user.teamId = "NULL"
         user.teamId = None
         user.save()
-        # team.members.remove(user)
         return super(removePlayerView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -81,6 +76,5 @@ class removePlayerView(FormView):
         user = get_object_or_404(UserProfile, user=self.request.user)
         teamId = user.teamId
         users = UserProfile.objects.filter(teamId=teamId)
-        # context['players'] = team.members.all()
         context['players'] = users
         return context
