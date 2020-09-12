@@ -1,7 +1,5 @@
 {% load static %}
 
-{% load socialaccount %}
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,26 +43,20 @@
 
                 <form class="login100-form validate-form" method="post" id="login">
                     <span class="login100-form-title">
-						Sign Up
+						Create Profile
                     </span>
-                    <div style="margin-left: 35px;">
-                        <a href="{% provider_login_url 'google' %}" class="google btn">
-                                <i class="fa fa-google fa-fw" style="margin-right:5px;"></i></b>Sign Up with Google</b>
-                        </a>
-                    </div>
-                    <hr>
-
                     {% csrf_token %}
                     {% for field in form %}
                         {% if field.label == "State" or field.label == "Gender" or field.label == "Current year" or field.label == "Accommodation required" %}
                             <div style="padding-top: 1vh; padding-bottom: 2vh;">
                                 {{ field.label }}{% if field.field.required %}*{% endif %} : {{ field }}
                             </div>
-                        {% elif field.label == "Username" %} {# {% elif %}#} {# {{field.label }}{% if field.field.required %}*{% endif %}:{{ field}}<br /><br />#} {% else %}
+                            {% elif field.label == "Username" %} {# {% elif %}#} {# {{field.label }}{% if field.field.required %}*{% endif %}:{{ field}}<br /><br />#} {% else %}
                             <div class="wrap-input100" style="position: relative;">
                         {# {{ field.label }}: {{field}}#}
 
-                                <input class="input100" type="{{ field.field.widget.input_type }}" value="{% if field.value != NULL %}{{ field.value }}{% endif %}" name="{{ field.name }}" placeholder="{% if field.field.required %}{{ field.label }}*{% else %} Referral code (optional){% endif %}"/>
+                                <input class="input100" type="{{ field.field.widget.input_type }}" value="{% if field.value != NULL %}{{ field.value }}{% endif %}" name="{{ field.name }}" placeholder="{% if field.field.required %}{{ field.label }}*{% else %} Referral code (optional){% endif %}"
+                                />
                                 <span class="focus-input100"></span>
                                 <span class="symbol-input100">
                                     <i class="{{ field.field.widget.attrs.icon_name }}" aria-hidden="true"></i>
@@ -93,7 +85,7 @@
 
                     <div class="container-login100-form-btn">
                         <button class="login100-form-btn">
-							Sign Up
+							Create
 						</button>
                     </div>
                     <div class="text-center p-t-136">

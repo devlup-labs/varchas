@@ -1,12 +1,12 @@
 from django.views.generic import CreateView
 from .models import UserProfile
-from .forms import RegisterForm
+from .forms import RegisterForm, GoogleCreateProfileForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from registration.models import TeamRegistration
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -98,6 +98,26 @@ def joinTeam(request):
         return reverse('login')
     return render(request, 'accounts/joinTeam.html')
 
+def GoogleLogin(request):
+    user = get_object_or_404(User, email=request.user.email)
+    if (UserProfile.objects.filter(user = user).exists()):
+        return HttpResponseRedirect(reverse('main:home'))
+    else:
+        new_userprofile = UserProfile.objects.create(user=user)
+        new_userprofile.user.username = new_userprofile.user.email
+        new_userprofile.save()
+        return HttpResponseRedirect(reverse('accounts:google-register'))
+
+class GoogleCreateProfileView(CreateView):
+    form_class = GoogleCreateProfileForm
+    template_name = 'accounts/googleregister.html'
+
+    def form_valid(self, form):
+        user = self.request.user
+        data = self.request.POST.copy()
+        form = GoogleCreateProfileForm(data)
+        UserProfile.objects.filter(user=user).update(gender=data['gender'], phone=data['phone'], college=data['college'], state=data['state'], referral=data['referral'], accommodation_required=data['accommodation_required'])
+        return HttpResponseRedirect(reverse('main:home'))
 
 class UserViewSet(viewsets.ModelViewSet):
     """

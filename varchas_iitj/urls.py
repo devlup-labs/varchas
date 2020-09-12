@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
-from accounts.views import CustomLoginView
+from accounts.views import CustomLoginView, GoogleLogin
 from django.conf.urls import handler404, handler500
 from main.views import error_404, error_500
 from django.conf.urls import url
@@ -34,6 +34,8 @@ urlpatterns = [
     path('registration/', include('registration.urls')),
     path('events/', include('events.urls')),
     path('sponsors/', include('sponsors.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('googlelogin/', GoogleLogin, name='googlelogin'),
     url('^', include('django.contrib.auth.urls')),
 ]
 

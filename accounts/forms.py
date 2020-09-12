@@ -91,3 +91,23 @@ class RegisterForm(UserCreationForm):
 class PasswordResetCaptchaForm(PasswordResetForm):
     email = forms.EmailField(
         widget=forms.TextInput(attrs={'placeholder': ' ', 'type': 'email', 'maxlength': '254'}))
+
+class GoogleCreateProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['college', 'referral']
+
+    phone = forms.CharField(min_length=10, max_length=13, widget=forms.TextInput(attrs={'placeholder': ' '}))
+    gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICES, required=True,
+                               widget=forms.Select(attrs={'class': 'mdb-select'}))
+    state = forms.ChoiceField(choices=UserProfile.STATE_CHOICES, required=True,
+                              widget=forms.Select(attrs={'class': 'mdb-select'}))
+
+    accommodation_required = forms.ChoiceField(choices=UserProfile.ACCOMMODATION_CHOICES,
+                                               widget=forms.Select(attrs={'class': 'mdb-select'}), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(GoogleCreateProfileForm, self).__init__(*args, **kwargs)
+        self.fields['phone'].widget.attrs['icon_name'] = "fa fa-phone"
+        self.fields['college'].widget.attrs['icon_name'] = "fa fa-university"
+        self.fields['referral'].widget.attrs['icon_name'] = "fa fa-id-badge"

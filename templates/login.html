@@ -1,5 +1,7 @@
 {% load static %}
 
+{% load socialaccount %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +44,12 @@
                     <span class="login100-form-title">
                         Member Login
                     </span>
-
+                    <div style="margin-left: 35px;">
+                        <a href="{% provider_login_url 'google' %}" class="google btn">
+                                <i class="fa fa-google fa-fw" style="margin-right:5px;"></i></b>Login with Google</b>
+                        </a>
+                    </div>
+                    <hr>
 
                 {% if form.errors %}
                     {% for field in form %}
