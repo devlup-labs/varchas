@@ -91,8 +91,10 @@ class RegisterForm(UserCreationForm):
 class PasswordResetCaptchaForm(PasswordResetForm):
     email = forms.EmailField(
         widget=forms.TextInput(attrs={'placeholder': ' ', 'type': 'email', 'maxlength': '254'}))
+     
 
 class GoogleCreateProfileForm(forms.ModelForm):
+
     class Meta:
         model = UserProfile
         fields = ['college', 'referral']

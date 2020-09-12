@@ -98,15 +98,17 @@ def joinTeam(request):
         return reverse('login')
     return render(request, 'accounts/joinTeam.html')
 
+
 def GoogleLogin(request):
     user = get_object_or_404(User, email=request.user.email)
-    if (UserProfile.objects.filter(user = user).exists()):
+    if (UserProfile.objects.filter(user=user).exists()):
         return HttpResponseRedirect(reverse('main:home'))
     else:
         new_userprofile = UserProfile.objects.create(user=user)
         new_userprofile.user.username = new_userprofile.user.email
         new_userprofile.save()
         return HttpResponseRedirect(reverse('accounts:google-register'))
+
 
 class GoogleCreateProfileView(CreateView):
     form_class = GoogleCreateProfileForm
@@ -115,9 +117,9 @@ class GoogleCreateProfileView(CreateView):
     def form_valid(self, form):
         user = self.request.user
         data = self.request.POST.copy()
-        form = GoogleCreateProfileForm(data)
         UserProfile.objects.filter(user=user).update(gender=data['gender'], phone=data['phone'], college=data['college'], state=data['state'], referral=data['referral'], accommodation_required=data['accommodation_required'])
         return HttpResponseRedirect(reverse('main:home'))
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
