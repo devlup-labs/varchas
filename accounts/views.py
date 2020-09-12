@@ -118,7 +118,7 @@ class GoogleCreateProfileView(CreateView):
         user = self.request.user
         data = self.request.POST.copy()
         UserProfile.objects.filter(user=user).update(gender=data['gender'], phone=data['phone'], college=data['college'],
-        state=data['state'], referral=data['referral'], accommodation_required=data['accommodation_required'])
+            state=data['state'], referral=data['referral'], accommodation_required=data['accommodation_required'])
         return HttpResponseRedirect(reverse('main:home'))
 
 
