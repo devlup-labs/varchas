@@ -1,6 +1,6 @@
 from django.views.generic import CreateView
 from .models import UserProfile
-from .forms import RegisterForm, GoogleCreateProfileForm
+from .forms import RegisterForm, CreateUserProfileForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
@@ -11,18 +11,20 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer
+from django.contrib import messages
 
 
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'accounts/register.html'
-    success_url = '/login/'
+    success_url = '/account/createprofile/'
 
     def form_valid(self, form):
         data = self.request.POST.copy()
         data['username'] = data['email']
         form = RegisterForm(data)
         user = form.save()
+        self.request.session['email'] = user.email
         RegisterView.create_profile(user, **form.cleaned_data)
         return super(RegisterView, self).form_valid(form)
 
@@ -33,12 +35,7 @@ class RegisterView(CreateView):
 
     @staticmethod
     def create_profile(user=None, **kwargs):
-        userprofile = UserProfile.objects.create(user=user, gender=kwargs['gender'], phone=kwargs['phone'],
-                                                 college=kwargs['college'],
-                                                 state=kwargs['state'],
-                                                 accommodation_required=kwargs['accommodation_required'],
-                                                 referral=kwargs['referred_by']
-                                                 )
+        userprofile = UserProfile.objects.create(user=user)
         userprofile.save()
 
 
@@ -56,7 +53,8 @@ class CustomLoginView(LoginView):
 @login_required(login_url="login")
 def DisplayProfile(request):
     user = get_object_or_404(UserProfile, user=request.user)
-    return render(request, 'accounts/profile.html', {'userprofile': user, 'user': request.user, 'page': "profile"})
+    return render(request, 'accounts/profile.html', {'userprofile': user, 'user': request.user, 
+                                                     'page': "profile"})
 
 
 @login_required(login_url="login")
@@ -64,7 +62,8 @@ def DisplayTeam(request):
     user = get_object_or_404(UserProfile, user=request.user)
     teamId = user.teamId
     team = get_object_or_404(TeamRegistration, teamId=teamId)
-    return render(request, 'accounts/myTeam.html', {'profile_team': team, 'profile_user': user, 'page': "team"})
+    return render(request, 'accounts/myTeam.html', {'profile_team': team, 'profile_user': user, 
+                                                    'page': "team"})
 
 
 @login_required(login_url="login")
@@ -101,27 +100,36 @@ def joinTeam(request):
 
 def GoogleLogin(request):
     user = get_object_or_404(User, email=request.user.email)
-    if (UserProfile.objects.filter(user=user).exists()):
+    if UserProfile.objects.filter(user=user).exists():
         return HttpResponseRedirect(reverse('main:home'))
-    else:
-        new_userprofile = UserProfile.objects.create(user=user)
-        new_userprofile.user.username = new_userprofile.user.email
-        new_userprofile.save()
-        return HttpResponseRedirect(reverse('accounts:google-register'))
+    new_userprofile = UserProfile.objects.create(user=user)
+    new_userprofile.user.username = new_userprofile.user.email
+    new_userprofile.save()
+    return HttpResponseRedirect(reverse('accounts:createprofile'))
 
 
-class GoogleCreateProfileView(CreateView):
-    form_class = GoogleCreateProfileForm
+class CreateUserProfileView(CreateView):
+    form_class = CreateUserProfileForm
     template_name = 'accounts/googleregister.html'
 
     def form_valid(self, form):
         user = self.request.user
+        if user.username != "":
+            data = self.request.POST.copy()
+            profile = UserProfile.objects.filter(user=user)
+            profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
+                           state=data['state'], referral=data['referral'],
+                           accommodation_required=data['accommodation_required'])
+            return HttpResponseRedirect(reverse('main:home'))
+        email = self.request.session['email']
+        user = get_object_or_404(User, email=email)
         data = self.request.POST.copy()
-        UserProfile.objects.filter(user=user).update(gender=data['gender'],
-                                                     phone=data['phone'], college=data['college'],
-                                                     state=data['state'], referral=data['referral'],
-                                                     accommodation_required=data['accommodation_required'])
-        return HttpResponseRedirect(reverse('main:home'))
+        profile = UserProfile.objects.filter(user=user)
+        profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
+                       state=data['state'], referral=data['referral'],
+                       accommodation_required=data['accommodation_required'])
+        messages.success(self.request, 'Registration successful!')
+        return HttpResponseRedirect(reverse('login'))
 
 
 class UserViewSet(viewsets.ModelViewSet):

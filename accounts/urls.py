@@ -13,7 +13,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('register/', views.RegisterView.as_view(), name='register'),
-    path('googleregister/', views.GoogleCreateProfileView.as_view(), name='google-register'),
+    path('createprofile/', views.CreateUserProfileView.as_view(), name='createprofile'),
     url(r'profile$', views.DisplayProfile, name='profile'),
     url(r'^myTeam$', views.DisplayTeam, name='myTeam'),
     url(r'joinTeam$', views.joinTeam, name='joinTeam'),
