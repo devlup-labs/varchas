@@ -73,13 +73,14 @@ class CreateUserProfileForm(forms.ModelForm):
                               widget=forms.Select(attrs={'class': 'mdb-select'}))
 
     accommodation_required = forms.ChoiceField(choices=UserProfile.ACCOMMODATION_CHOICES,
-                                               widget=forms.Select(attrs={'class': 'mdb-select'}), required=False)
+                                               widget=forms.Select(attrs={'class': 'mdb-select'}),
+                                               required=False)
     referred_by = forms.CharField(max_length=8, required=False, 
                                   widget=forms.TextInput(attrs={'placeholder': ' '}))
 
     class Meta:
         model = UserProfile
-        fields = ['phone', 'gender', 'college', 'state', 'accommodation_required']                        
+        fields = ['phone', 'gender', 'college', 'state', 'accommodation_required']                       
 
     def clean_phone(self):
         _dict = super(CreateUserProfileForm, self).clean()

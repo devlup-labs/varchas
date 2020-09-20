@@ -114,16 +114,16 @@ class CreateUserProfileView(CreateView):
         user = self.request.user
         if user.username != "":
             data = self.request.POST.copy()
-            form = CreateUserProfileForm(data)
+            CreateUserProfileForm(data)
             profile = UserProfile.objects.filter(user=user)
             profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
-                           state=data['state'], referral=data['referral'],
+                           state=data['state'], referral=data['referred_by'],
                            accommodation_required=data['accommodation_required'])
             return HttpResponseRedirect(reverse('main:home'))
         email = self.request.session['email']
         user = get_object_or_404(User, email=email)
         data = self.request.POST.copy()
-        form = CreateUserProfileForm(data)
+        CreateUserProfileForm(data)
         profile = UserProfile.objects.filter(user=user)
         profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
                        state=data['state'], referral=data['referred_by'],
