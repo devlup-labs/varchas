@@ -114,6 +114,7 @@ class CreateUserProfileView(CreateView):
         user = self.request.user
         if user.username != "":
             data = self.request.POST.copy()
+            form = CreateUserProfileForm(data)
             profile = UserProfile.objects.filter(user=user)
             profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
                            state=data['state'], referral=data['referral'],
@@ -122,12 +123,18 @@ class CreateUserProfileView(CreateView):
         email = self.request.session['email']
         user = get_object_or_404(User, email=email)
         data = self.request.POST.copy()
+        form = CreateUserProfileForm(data)
         profile = UserProfile.objects.filter(user=user)
         profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
-                       state=data['state'], referral=data['referral'],
+                       state=data['state'], referral=data['referred_by'],
                        accommodation_required=data['accommodation_required'])
         messages.success(self.request, 'Registration successful!')
         return HttpResponseRedirect(reverse('login'))
+
+    def form_invalid(self, form, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
 
 
 class UserViewSet(viewsets.ModelViewSet):
