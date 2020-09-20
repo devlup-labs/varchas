@@ -108,7 +108,7 @@ def GoogleLogin(request):
 
 class CreateUserProfileView(CreateView):
     form_class = CreateUserProfileForm
-    template_name = 'accounts/googleregister.html'
+    template_name = 'accounts/createprofile.html'
 
     def form_valid(self, form):
         user = self.request.user
