@@ -37,24 +37,11 @@ class CampusAmbassadorForm(forms.ModelForm):
 class TeamRegistrationForm(forms.ModelForm):
     class Meta:
         model = TeamRegistration
-        fields = ['sport', 'college', 'teamId']
+        fields = ['sport', 'college']
 
     def __init__(self, *args, **kwargs):
         super(TeamRegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['teamId'].widget.attrs['icon_name'] = "fa fa-id-card"
         self.fields['college'].widget.attrs['icon_name'] = "fa fa-university"
-
-
-# class TeamRegistrationForm1(forms.ModelForm):
-
-#     class Meta:
-#         model = TeamRegistration
-#         fields = ['sport', 'teamId', 'college']
-
-#     def __init__(self, *args, **kwargs):
-#         super(TeamRegistrationForm1, self).__init__(*args, **kwargs)
-#         self.fields['teamId'].widget.attrs['icon_name'] = "fa fa-id-card"
-#         self.fields['college'].widget.attrs['icon_name'] = "fa fa-university"
 
 
 class RemovePlayerForm(forms.Form):
