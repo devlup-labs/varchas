@@ -1,5 +1,5 @@
 from django.views.generic import CreateView
-from .forms import CampusAmbassadorForm, TeamRegistrationForm, TeamRegistrationForm1, RemovePlayerForm
+from .forms import CampusAmbassadorForm, TeamRegistrationForm, RemovePlayerForm
 from django.shortcuts import get_object_or_404
 from accounts.models import UserProfile
 from django.http import HttpResponse
@@ -27,7 +27,7 @@ class TeamFormationView(CreateView):
             data = self.request.POST.copy()
             spor = TeamRegistration.SPORT_CHOICES[int(data['sport'])-1][1][:3]
             data['teamId'] = "VA-" + spor[:3].upper() + '-' + user.username[:3].upper() + "{}".format(int(random()*100))
-            form = TeamRegistrationForm1(data)
+            form = TeamRegistrationForm(data)
             user = get_object_or_404(UserProfile, user=user)
             if user.teamId is not None:
                 message = "You are already in team {}".format(user.teamId)
