@@ -6,26 +6,14 @@ from registration.models import CampusAmbassador
 
 
 class RegisterForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={'type': 'text', 'placeholder': ' ', 'icon': 'a'}), required=False)
-    last_name = forms.CharField(widget=forms.TextInput(
-        attrs={'type': 'text', 'placeholder': ' '}), required=True)
-    first_name = forms.CharField(widget=forms.TextInput(
-        attrs={'type': 'text', 'placeholder': ' '}), required=True)
-    email = forms.EmailField(widget=forms.TextInput(
-        attrs={'type': 'email', 'maxlength': '254', 'placeholder': ' ', 'autocomplete': 'off'}))
-
-    password1 = forms.CharField(
-        min_length=8,
-        label=("Password"),
-        strip=False,
-        widget=forms.PasswordInput(attrs={'placeholder': ' '}),
-    )
-    password2 = forms.CharField(
-        label=("Confirm Password"),
-        strip=False,
-        widget=forms.PasswordInput(attrs={'placeholder': ' '}),
-    )
+    username = forms.CharField(required=False)
+    last_name = forms.CharField(required=True)
+    first_name = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    password1 = forms.CharField(min_length=8, label=("Password"), strip=False,
+                                widget=forms.PasswordInput())
+    password2 = forms.CharField(label=("Confirm Password"), strip=False,
+                                widget=forms.PasswordInput())
 
     class Meta:
         model = User
@@ -56,27 +44,18 @@ class RegisterForm(UserCreationForm):
 
 
 class PasswordResetCaptchaForm(PasswordResetForm):
-    email = forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': ' ', 'type': 'email', 'maxlength': '254'}))
+    email = forms.EmailField(required=True)
 
 
 class CreateUserProfileForm(forms.ModelForm):
 
-    phone = forms.CharField(max_length=13, widget=forms.TextInput(attrs={'placeholder': ' '}))
-    gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICES, required=True,
-                               widget=forms.Select(attrs={'class': 'mdb-select'}))
-    college = forms.CharField(
-        widget=forms.TextInput(
-            attrs={'class': 'mdb-autocomplete', 'maxlength': '128', 'placeholder': ' '}),
-        required=True)
-    state = forms.ChoiceField(choices=UserProfile.STATE_CHOICES, required=True,
-                              widget=forms.Select(attrs={'class': 'mdb-select'}))
-
+    phone = forms.CharField(max_length=13)
+    gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICES, required=True)
+    college = forms.CharField(required=True)
+    state = forms.ChoiceField(choices=UserProfile.STATE_CHOICES, required=True)
     accommodation_required = forms.ChoiceField(choices=UserProfile.ACCOMMODATION_CHOICES,
-                                               widget=forms.Select(attrs={'class': 'mdb-select'}),
                                                required=False)
-    referred_by = forms.CharField(max_length=8, required=False,
-                                  widget=forms.TextInput(attrs={'placeholder': ' '}))
+    referred_by = forms.CharField(max_length=8, required=False)
 
     class Meta:
         model = UserProfile

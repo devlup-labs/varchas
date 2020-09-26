@@ -25,18 +25,12 @@ class RegisterView(CreateView):
         form = RegisterForm(data)
         user = form.save()
         self.request.session['email'] = user.email
-        RegisterView.create_profile(user, **form.cleaned_data)
         return super(RegisterView, self).form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         context = self.get_context_data(**kwargs)
         context['form'] = form
         return self.render_to_response(context)
-
-    @staticmethod
-    def create_profile(user=None, **kwargs):
-        userprofile = UserProfile.objects.create(user=user)
-        userprofile.save()
 
 
 class CustomLoginView(LoginView):
@@ -47,6 +41,13 @@ class CustomLoginView(LoginView):
         if self.request.user.is_superuser:
             return reverse('adminportal:dashboard')
         else:
+            user = self.request.user
+            if User.objects.filter(username=user.username):
+                if UserProfile.objects.filter(user=user):
+                    return reverse('main:home')
+                messages.warning(self.request, """You're signed in as {}. You need to create your profile in order to
+                                                  proceed.""".format(user.username))
+                return reverse('accounts:createprofile')
             return reverse('main:home')
 
 
@@ -98,11 +99,11 @@ def joinTeam(request):
 
 def GoogleLogin(request):
     user = get_object_or_404(User, email=request.user.email)
+    user.username = user.email
+    user.save()
     if UserProfile.objects.filter(user=user).exists():
         return HttpResponseRedirect(reverse('main:home'))
-    new_userprofile = UserProfile.objects.create(user=user)
-    new_userprofile.user.username = new_userprofile.user.email
-    new_userprofile.save()
+    messages.warning(request, 'You need to create your profile in order to proceed')
     return HttpResponseRedirect(reverse('accounts:createprofile'))
 
 
@@ -115,20 +116,22 @@ class CreateUserProfileView(CreateView):
         if user.username != "":
             data = self.request.POST.copy()
             CreateUserProfileForm(data)
-            profile = UserProfile.objects.filter(user=user)
-            profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
-                           state=data['state'], referral=data['referred_by'],
-                           accommodation_required=data['accommodation_required'])
+            user.username = user.email
+            user.save()
+            profile = UserProfile(user=user, gender=data['gender'], phone=data['phone'],
+                                  college=data['college'], state=data['state'],
+                                  referral=data['referred_by'],
+                                  accommodation_required=data['accommodation_required'])
+            profile.save()
             return HttpResponseRedirect(reverse('main:home'))
         email = self.request.session['email']
         user = get_object_or_404(User, email=email)
         data = self.request.POST.copy()
         CreateUserProfileForm(data)
-        profile = UserProfile.objects.filter(user=user)
-        profile.update(gender=data['gender'], phone=data['phone'], college=data['college'],
-                       state=data['state'], referral=data['referred_by'],
-                       accommodation_required=data['accommodation_required'])
-        messages.success(self.request, 'Registration successful!')
+        profile = UserProfile(user=user, gender=data['gender'], phone=data['phone'],
+                              college=data['college'], state=data['state'],
+                              referral=data['referred_by'], accommodation_required=data['accommodation_required'])
+        profile.save()
         return HttpResponseRedirect(reverse('login'))
 
     def form_invalid(self, form, **kwargs):
