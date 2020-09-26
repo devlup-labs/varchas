@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView
 from .models import NavBarSubOptions, OurTeam, HomeEventCard
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import User
-from allauth.socialaccount.models import SocialAccount
+from django.contrib.auth import logout
 from accounts.models import UserProfile
 from rest_framework import viewsets
 from .serializers import OurTeamSerializer
@@ -20,8 +20,7 @@ class IndexView(TemplateView):
             if UserProfile.objects.filter(user=user):
                 userprofile = get_object_or_404(UserProfile, user=user)
             else:
-                if SocialAccount.objects.filter(user=user):
-                    User.objects.filter(username=user.username).delete()
+                logout(self.request)
         context = super(IndexView, self).get_context_data(**kwargs)
         context['event_list'] = HomeEventCard.objects.all
         if User.objects.filter(username=user.username):
