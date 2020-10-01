@@ -3,7 +3,6 @@ from .models import UserProfile
 from .forms import RegisterForm, CreateUserProfileForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import reverse, redirect
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from registration.models import TeamRegistration
@@ -24,8 +23,6 @@ class RegisterView(CreateView):
         data['username'] = data['email']
         form = RegisterForm(data)
         form.save()
-        user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password1'],)
-        login(self.request, user)
         return HttpResponseRedirect(reverse('login'))
 
     def form_invalid(self, form, **kwargs):
@@ -98,7 +95,7 @@ def joinTeam(request):
     return render(request, 'accounts/joinTeam.html')
 
 
-def SocialLogin(request):
+def CheckSocialUserProfile(request):
     user = get_object_or_404(User, email=request.user.email)
     user.username = user.email
     user.save()
