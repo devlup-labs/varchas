@@ -6,7 +6,7 @@
 <html lang="en">
 
 <head>
-    <title>Sign Up</title>
+    <title>Create Profile</title>
     <meta charset="UTF-8" />
     <script></script>
     <style></style>
@@ -44,31 +44,38 @@
                 </div>
 
                 <form class="login100-form validate-form" method="post" id="login">
-                    <span class="login100-form-title"> Sign Up </span>
-                    <div style="margin-left: 35px;">
-                        <a href="{% provider_login_url 'google' %}" class="google btn">
-                            <i class="fa fa-google fa-fw" style="margin-right:5px;"></i></b>Sign Up with Google</b>
-                        </a>
+
+                    {% if messages %}
+                    <div class="alert alert-warning">
+                        <ul class="messages" style="padding: 5px;"">
+                        {% for message in messages %}
+                            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> 
+                                <b style="font-size: small;"> {{ message }} </b>
+                            </li>
+                        {% endfor %}
+                        </ul>
                     </div>
                     <hr>
-                    {% csrf_token %}
-                    {% for field in form %} 
-                    {% if field.label == "State" or field.label == "Gender" or field.label == "Current year" or field.label == "Accommodation required" %}
-                    <div style="padding-top: 1vh; padding-bottom: 2vh;">
-                        {{ field.label }}{% if field.field.required %}*{% endif %} : {{ field }}
-                    </div>
-                    {% elif field.label == "Username" %} {# {% elif %}#} {# {{field.label }}{% if field.field.required %}*{% endif %}:{{ field}}<br /><br />#} {% else %}
-                    <div class="wrap-input100" style="position: relative;">
-                        {# {{ field.label }}: {{field}}#}
-
-                        <input class="input100" type="{{ field.field.widget.input_type }}" value="{% if field.value != NULL %}{{ field.value }}{% endif %}" name="{{ field.name }}" placeholder="{% if field.field.required %}{{ field.label }}*{% else %} {{ field.label }} {% endif %}"
-                        />
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-							<i class="{{ field.field.widget.attrs.icon_name }}" aria-hidden="true"></i>
-						</span>
-                    </div>
                     {% endif %}
+
+                    <span class="login100-form-title">
+						Create Profile
+                    </span>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        {% if field.label == "State" or field.label == "Gender" or field.label == "Current year" or field.label == "Accommodation required" %}
+                            <div style="padding-top: 1vh; padding-bottom: 2vh;">
+                                {{ field.label }}{% if field.field.required %}*{% endif %} : {{ field }}
+                            </div>
+                        {% else %}
+                            <div class="wrap-input100" style="position: relative;">
+                                <input class="input100" type="{{ field.field.widget.input_type }}" value="{% if field.value != NULL %}{{ field.value }}{% endif %}" name="{{ field.name }}" placeholder="{% if field.field.required %}{{ field.label }}*{% else %} Referral code (optional){% endif %}" />
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="{{ field.field.widget.attrs.icon_name }}" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        {% endif %}
                         {% for error in field.errors %}
                             <div class="alert alert-danger">
                                 <strong>{{ error|escape }}</strong>
@@ -80,7 +87,6 @@
                                 <strong>{{ error|escape }}</strong>
                             </div>
                         {% endfor %}
-
                     {% endfor %}
                     {% if messages %} 
                         {% for message in messages %} 
@@ -92,14 +98,19 @@
 
                     <div class="container-login100-form-btn">
                         <button class="login100-form-btn">
-							Sign Up
+							Create
 						</button>
                     </div>
                     <div class="text-center p-t-136">
+                        <a class="txt2" href="{% url 'accounts:register' %}">
+                            Create your Account
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
+                        <br>
                         <a class="txt2" href="{% url 'registration:ca' %}">
-							Register as Campus Ambassador
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
+                            Register as a Campus Ambassador
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </form>
                 <a href="{% url 'main:home' %}" style="position: absolute; right: 5%; top: 6%;">

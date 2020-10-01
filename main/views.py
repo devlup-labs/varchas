@@ -1,8 +1,9 @@
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
-# from .utils import SiteAccessMixin
 from .models import NavBarSubOptions, OurTeam, HomeEventCard
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from accounts.models import UserProfile
 from rest_framework import viewsets
 from .serializers import OurTeamSerializer
@@ -14,13 +15,18 @@ class IndexView(TemplateView):
     template_name = 'main/index.html'
 
     def get_context_data(self, **kwargs):
-        if self.request.user.username != "":
-            userprofile = get_object_or_404(UserProfile, user=self.request.user)
+        user = self.request.user
+        if user.is_authenticated:
+            if UserProfile.objects.filter(user=user):
+                userprofile = get_object_or_404(UserProfile, user=user)
+            else:
+                logout(self.request)
         context = super(IndexView, self).get_context_data(**kwargs)
         context['event_list'] = HomeEventCard.objects.all
-        if self.request.user.username != "":
-            context['userprofile'] = userprofile
-            context['page'] = "home"
+        if User.objects.filter(username=user.username):
+            if UserProfile.objects.filter(user=user):
+                context['userprofile'] = userprofile
+                context['page'] = "home"
         return context
 
 
