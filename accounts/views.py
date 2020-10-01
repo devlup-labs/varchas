@@ -1,45 +1,34 @@
 from django.views.generic import CreateView
 from .models import UserProfile
-from .forms import RegisterForm
+from .forms import RegisterForm, CreateUserProfileForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from registration.models import TeamRegistration
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer
+from django.contrib import messages
 
 
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'accounts/register.html'
-    success_url = '/login/'
 
     def form_valid(self, form):
         data = self.request.POST.copy()
         data['username'] = data['email']
         form = RegisterForm(data)
-        user = form.save()
-        RegisterView.create_profile(user, **form.cleaned_data)
-        return super(RegisterView, self).form_valid(form)
+        form.save()
+        return HttpResponseRedirect(reverse('login'))
 
     def form_invalid(self, form, **kwargs):
         context = self.get_context_data(**kwargs)
         context['form'] = form
         return self.render_to_response(context)
-
-    @staticmethod
-    def create_profile(user=None, **kwargs):
-        userprofile = UserProfile.objects.create(user=user, gender=kwargs['gender'], phone=kwargs['phone'],
-                                                 college=kwargs['college'],
-                                                 state=kwargs['state'],
-                                                 accommodation_required=kwargs['accommodation_required'],
-                                                 referral=kwargs['referred_by']
-                                                 )
-        userprofile.save()
 
 
 class CustomLoginView(LoginView):
@@ -50,6 +39,13 @@ class CustomLoginView(LoginView):
         if self.request.user.is_superuser:
             return reverse('adminportal:dashboard')
         else:
+            user = self.request.user
+            if User.objects.filter(username=user.username):
+                if UserProfile.objects.filter(user=user):
+                    return reverse('main:home')
+                messages.warning(self.request, """You're signed in as {}. You need to create your profile in order to
+                                                  proceed.""".format(user.email))
+                return reverse('accounts:createprofile')
             return reverse('main:home')
 
 
@@ -97,6 +93,36 @@ def joinTeam(request):
             return redirect('accounts:myTeam')
         return reverse('login')
     return render(request, 'accounts/joinTeam.html')
+
+
+def CheckSocialUserProfile(request):
+    user = get_object_or_404(User, email=request.user.email)
+    user.username = user.email
+    user.save()
+    if UserProfile.objects.filter(user=user).exists():
+        return HttpResponseRedirect(reverse('main:home'))
+    messages.warning(request, 'You need to create your profile in order to proceed')
+    return HttpResponseRedirect(reverse('accounts:createprofile'))
+
+
+class CreateUserProfileView(CreateView):
+    form_class = CreateUserProfileForm
+    template_name = 'accounts/createprofile.html'
+
+    def form_valid(self, form):
+        user = self.request.user
+        data = self.request.POST.copy()
+        profile = UserProfile(user=user, gender=data['gender'], phone=data['phone'],
+                              college=data['college'], state=data['state'],
+                              referral=data['referral'],
+                              accommodation_required=data['accommodation_required'])
+        profile.save()
+        return HttpResponseRedirect(reverse('main:home'))
+
+    def form_invalid(self, form, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
 
 
 class UserViewSet(viewsets.ModelViewSet):

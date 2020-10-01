@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'accounts.apps.AccountsConfig',
     'adminportal.apps.AdminportalConfig',
     'events.apps.EventsConfig',
@@ -29,6 +30,10 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'widget_tweaks',
     'rest_framework',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -150,8 +155,10 @@ CKEDITOR_CONFIGS = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 AUTHENTICATION_BACKENDS = (
-    ('django.contrib.auth.backends.ModelBackend'),
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 APPEND_SLASH = True
@@ -167,4 +174,24 @@ DEFAULT_FROM_EMAIL = 'noreply@varchas2020.org'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
+}
+
+SITE_ID = 5
+
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+
+LOGIN_REDIRECT_URL = '/check/'
+
+LOGOUT_REDIRECT_URL = '/login/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
 }
